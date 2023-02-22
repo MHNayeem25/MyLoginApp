@@ -125,7 +125,7 @@ exports.updateUserDetails = catchAsyncErrors(async (req,res,next)=>{
         console.log(error);
     })
     //await user.save();
-    res.status(200).json({
+    return res.status(200).json({
         success: true
     });
 })
@@ -202,7 +202,6 @@ exports.verifyOtp = catchAsyncErrors(async (req,res,next) =>{
         message: "OTP matched",
         resetSessionToken
     });
-    next();
 })
 
 //Reset Password
@@ -279,12 +278,12 @@ exports.usernameAuth = catchAsyncErrors(async (req,res,next) => {
         })
     }
 
-    res.status(200).json({
+    return res.status(200).json({
         success: true,
         message: "User found",
         user
     });
-    next();
+    //next();
     
     //sendToken(user, 200, res);
 
