@@ -43,7 +43,7 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
 
     try{
         await sendEmail({
-            email: user.email,
+            email: email,
             subject: `Registration Successfull`,
             message: emailBody
         });
