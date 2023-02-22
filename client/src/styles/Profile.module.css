@@ -1,0 +1,14 @@
+.glass{
+    @apply h-[120vh] w-5/6 my-auto;
+
+}
+
+.profile_img{
+    @apply w-40 cursor-pointer;
+
+}
+
+
+.textbox{
+    @apply w-3/4;
+}
