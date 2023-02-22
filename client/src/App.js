@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import {createBrowserRouter, Route, RouterProvider} from 'react-router-dom'
+import {createBrowserRouter, RouterProvider} from 'react-router-dom'
 
 //Import all compnonents
 import Username from './components/Username'
@@ -9,7 +9,7 @@ import Password from './components/Password'
 import Profile from './components/Profile'
 import Recovery from './components/Recovery'
 import Reset from './components/Reset'
-import PageNotFound from './components/PageNotFound'
+
 
 /** Auth Middleware */
 import { AuthorizeUser, ProtectRoute } from './middleware/auth';

@@ -1,18 +1,18 @@
 import {create} from 'zustand';
 import { devtools } from 'zustand/middleware'
 
-const initialValues = {
-    username: '',
-    profile: '',
-    //extra
-    firstName: '',
-    lastName: '',
-    email: "",
-    mobile: '',
-    address: '',
-    id: '',
-    active: false
-}
+// const initialValues = {
+//     username: '',
+//     profile: '',
+//     //extra
+//     firstName: '',
+//     lastName: '',
+//     email: "",
+//     mobile: '',
+//     address: '',
+//     id: '',
+//     active: false
+// }
 export const useAuthStore = create(devtools((set)=>({
     auth:{
         username : '',

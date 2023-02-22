@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react'
-import jwt_decode from 'jwt-decode';
 import { Link, useNavigate} from 'react-router-dom'
 import avatar from '../assets/profile.png'
 import toast, { Toaster } from 'react-hot-toast'
@@ -15,7 +14,7 @@ import { updateUser , logoutUser, getUsername} from '../helper/helper'
 const Profile = () => {
   const navigate = useNavigate();
   const [file, setFile] = useState();
-  const [extraData, setExtraData ] = useState();
+  const [setExtraData ] = useState();
   const { username, profile , mobile, email, firstName, lastName, address, id } = useAuthStore(state => state.auth);
   const setExtra = useAuthStore(state => state.setExtra);
   const setUsername = useAuthStore(state => state.setUsername);
@@ -37,7 +36,7 @@ const Profile = () => {
       }
       fetchData();
     }
-  },[])
+  },[setExtra,setExtraData,setUsername,setProfile])
   
 
   //const navigate = useNavigate();

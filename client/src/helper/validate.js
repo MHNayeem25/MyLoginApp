@@ -1,6 +1,6 @@
 import toast from 'react-hot-toast'
-import { passwordLogin, usernameLogin } from './helper';
-import { useAuthStore } from '../store/store'
+import {usernameLogin } from './helper';
+// import { useAuthStore } from '../store/store'
 
 
 /** Validate login page username whether it exists in  */
@@ -8,7 +8,7 @@ export async function usernameValidate(values){
     const errors = usernameVerify({}, values);  //function
     if(values.username){
         //check if user exist or not
-        const { status, data} = await usernameLogin(values.username);
+        const { status} = await usernameLogin(values.username);
         //console.log(data.profile);
         // useAuthStore.setState({profile : data.user.profile});
         
@@ -23,6 +23,7 @@ export async function usernameValidate(values){
 
 /** verify password */
 function passwordVerify(errors={}, values){
+    // eslint-disable-next-line
     const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
     if(!values.password){
         errors.password = toast.error("Password Required..!");
@@ -59,7 +60,7 @@ function usernameVerify(error = {}, values){
 export async function resetPasswordValidation(values){
     const errors = passwordVerify({},values);
     if(!errors.password){
-        if (values.password != values.confirm_pwd) {
+        if (values.password !== values.confirm_pwd) {
             errors.exist = toast.error("Password does not match.")
         }
     }

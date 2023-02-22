@@ -28,7 +28,7 @@ const Username = () => {
       }
       fetchData();
     }
-  }, [])
+  }, [setProfile,setUsername])
 
   const formik = useFormik({
     initialValues:{
