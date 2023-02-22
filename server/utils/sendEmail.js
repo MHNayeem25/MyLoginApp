@@ -16,7 +16,10 @@ const sendEmail = async (options)=>{
         subject:options.subject,
         html:options.message
     };
-    await transporter.sendMail(mailOptions);
+    const {error} = await transporter.sendMail(mailOptions)
+    if(error){
+        return error
+    }
 }
 
 

@@ -41,19 +41,21 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
     };
     const emailBody = mailGenerator.generate(message);
 
-    try {
-        const user = await User.create({
-            username, email, password, profile
-        });
+    try{
         await sendEmail({
             email: user.email,
             subject: `Registration Successfull`,
             message: emailBody
         });
-        sendToken(user, 200, res);
-    } catch (error) {
+    }
+    catch(error){
         return next(new ErrorHandler(error.message, 500));
     }
+    const user = await User.create({
+        username, email, password, profile
+    });
+    return sendToken(user, 200, res);
+    
     
     
 });
