@@ -75,7 +75,7 @@ exports.loginUser = catchAsyncErrors(async (req,res,next)=>{
     if (!isPasswordMatched) {
         return next(new ErrorHandler("Invalid email or password", 401));
     }
-    sendToken(user, 200, res);
+    return sendToken(user, 200, res);
     //res.send();
     // const token = user.getJWTToken();
     // res.status(200).json({
@@ -197,7 +197,7 @@ exports.verifyOtp = catchAsyncErrors(async (req,res,next) =>{
         return next(new ErrorHandler("Reset Password Token is invalid or has expired.", 404));
     }
     //console.log('success');
-    res.status(200).json({
+    return res.status(200).json({
         success: true,
         message: "OTP matched",
         resetSessionToken
@@ -219,7 +219,7 @@ exports.resetPassword = catchAsyncErrors(async (req, res, next) => {
     user.resetPasswordToken = undefined;
     user.resetPasswordExpire = undefined;
     await user.save();
-    sendToken(user, 200, res);
+    return sendToken(user, 200, res);
 })
 
 
@@ -255,7 +255,7 @@ exports.logout = catchAsyncErrors(async (req, res, next) => {
 
 
 
-    res.status(200).json({
+    return res.status(200).json({
         success: true,
         message: "Logged OUt"
     });
@@ -272,7 +272,7 @@ exports.usernameAuth = catchAsyncErrors(async (req,res,next) => {
 
     if (!user) {
         //return next(new ErrorHandler("Invalid username", 401));
-        res.status(401).json({
+        return res.status(401).json({
             success:false,
             message:'User not found'
         })

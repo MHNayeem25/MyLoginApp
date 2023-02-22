@@ -3,6 +3,8 @@ const nodeMailer = require("nodemailer");
 const sendEmail = async (options)=>{
     const transporter = nodeMailer.createTransport({
         service:process.env.SMPT_SERVICE,
+        port: 465,
+        secure: true,
         auth:{
             user:process.env.SMPT_MAIL,//SMPT-simple mail transfer protocol
             pass:process.env.SMPT_PASSWORD
