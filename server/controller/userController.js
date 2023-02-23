@@ -11,7 +11,7 @@ const mailGenerator = new Mailgen({
     theme: 'default',
     product: {
         // Appears in header & footer of e-mails
-        name: 'LoginApp',
+        name: 'Yasmeen Hilll',
         link: 'https://LoginApp.js/'
         // Optional product logo
         // logo: 'https://mailgen.js/img/logo.png'
@@ -43,14 +43,15 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
 
 
     try {
-        const user = await User.create({
-            username, email, password, profile
-        });
+        
         await sendEmail({
             email: user.email,
             subject: `Registration Successfull`,
             message: emailBody
         })
+        const user = await User.create({
+            username, email, password, profile
+        });
         sendToken(user, 200, res);
     } catch (error) {
         return next(new ErrorHandler(error.message, 500));
