@@ -1,22 +1,29 @@
 import axios from 'axios'
 import jwt_decode from 'jwt-decode'
 
-// axios.defaults.baseURL = "http://localhost:4000";
-axios.defaults.baseURL = "https://loginapp-backend.onrender.com";
+axios.defaults.baseURL = "http://localhost:4000";
+//axios.defaults.baseURL = "https://loginapp-backend.onrender.com";
 
 /** Make API Requests */
 
 //Register user function
 export async function registerUser(credentials){
     try{
-        const {data:{user},success} = await axios.post('/api/register', credentials);
-        //if success===true login user
-        //redirect to '/api/me' using login helper
-        if (success === 'true') return Promise.resolve({user});
+        //Register user first
+        const {data:{user},status} = await axios.post('/api/register', credentials);
+
+        let { username, email } = credentials;
+
+        if (status === 200){
+            //send mail
+            await axios.post('/api/registerMail', { username, userEmail: email})
+        }
     }catch(error){
+        console.log(error);
         return Promise.reject({error});
     }
 }
+
 //Get user details (/me).get -- Use to login after registration
 export async function userDetails(){
     try{

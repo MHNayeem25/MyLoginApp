@@ -10,7 +10,7 @@ import {resetPassword} from '../helper/helper'
 const Reset = () => {
 
   const sessionToken = localStorage.getItem('sessionToken');
-  console.log(sessionToken);
+  //console.log(sessionToken);
   const { username } = useAuthStore(state => state.auth);
   const navigate = useNavigate();
   const formik = useFormik({

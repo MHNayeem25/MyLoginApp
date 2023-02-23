@@ -18,7 +18,7 @@ const Recovery = () => {
 
   //to send otp
   useEffect( ()=>{
-    console.log("Otp sent");
+    //console.log("Otp sent");
       const pr = sendOtp(username);
       //console.log(pr);
 

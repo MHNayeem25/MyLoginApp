@@ -14,7 +14,7 @@ import { updateUser , logoutUser, getUsername} from '../helper/helper'
 const Profile = () => {
   const navigate = useNavigate();
   const [file, setFile] = useState();
-  const [setExtraData ] = useState();
+  //const [data,setExtraData ] = useState();
   const { username, profile , mobile, email, firstName, lastName, address, id } = useAuthStore(state => state.auth);
   const setExtra = useAuthStore(state => state.setExtra);
   const setUsername = useAuthStore(state => state.setUsername);
@@ -28,7 +28,7 @@ const Profile = () => {
       const fetchData = async () =>{
         const data = await getUsername();
         //console.log(data);
-        setExtraData(data);
+        //setExtraData(data);
         setExtra(data);
         setUsername(data.username);
         setProfile(data.profile);
@@ -36,7 +36,7 @@ const Profile = () => {
       }
       fetchData();
     }
-  },[setExtra,setExtraData,setUsername,setProfile])
+  },[setExtra,setUsername,setProfile])
   
 
   //const navigate = useNavigate();

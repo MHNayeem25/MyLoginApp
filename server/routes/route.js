@@ -2,12 +2,12 @@ const express = require('express');
 
 const router = express.Router();
 
-const { registerUser, loginUser, getUserDetails, updateUserDetails, forgotPassword, resetPassword, logout, usernameAuth, verifyOtp} = require('../controller/userController');
+const { registerUser, loginUser, getUserDetails, updateUserDetails, forgotPassword, resetPassword, logout, usernameAuth, verifyOtp, emailUser} = require('../controller/userController');
 const { isAuthenticatedUser, authCheck } = require('../middleware/auth');
 
 router.route('/register').post(registerUser);
 
-// router.route('/registerMail').post(); //Send the email
+router.route('/registerMail').post(emailUser); //Send the email
 
 // router.route('/authenticate').post(); //authenticate user
 

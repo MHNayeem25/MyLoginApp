@@ -12,7 +12,7 @@ const mailGenerator = new Mailgen({
     product: {
         // Appears in header & footer of e-mails
         name: 'Yasmeen Hilll',
-        link: 'https://LoginApp.js/'
+        link: 'https://helpful-longma-b0b709.netlify.app/'
         // Optional product logo
         // logo: 'https://mailgen.js/img/logo.png'
     }
@@ -21,9 +21,8 @@ const mailGenerator = new Mailgen({
 
 exports.registerUser = catchAsyncErrors(async (req, res, next) => {
     const { username, email, password, profile } = req.body;
-
     //check if username exists
-    const userPresent = await User.findOne({ username});
+    const userPresent = await User.findOne({ username });
     if (userPresent) {
         return next(new ErrorHandler("Please use an unique username.", 404));
     }
@@ -32,31 +31,45 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
         return next(new ErrorHandler("User already registered.", 404));
     }
 
+    try{
+        const user = await User.create({
+            username, email, password, profile
+        });
+        res.status(200).json({
+            user: user,
+            message: "Registered Successfully",
+        });
+    }catch(error){
+        return next(new ErrorHandler(error.message, 500));
+    }
+       
+});
+
+exports.emailUser = catchAsyncErrors(async (req,res,next)=>{
     const message = {
         body: {
-            name: username,
+            name: req.body.username,
             intro: 'Welcome to Mailgen! We\'re very excited to have you on board.',
             outro: 'Need help, or have questions? Just reply to this email, we\'d love to help.'
         }
     };
     const emailBody = mailGenerator.generate(message);
 
-
     try {
-        
         await sendEmail({
-            email: email,
+            email: req.body.userEmail,
             subject: `Registration Successfull`,
             message: emailBody
-        })
-        const user = await User.create({
-            username, email, password, profile
         });
-        sendToken(user, 200, res);
+        res.status(200).json({
+            message: "Registered Successfully",
+        });
+        //sendToken(200, res);
     } catch (error) {
         return next(new ErrorHandler(error.message, 500));
     }
-});
+
+})
 
 //Login User
 exports.loginUser = catchAsyncErrors(async (req,res,next)=>{
@@ -145,7 +158,7 @@ exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
     const resetToken = user.getResetPasswordToken();
     //console.log(resetToken);
     await user.save({ validateBeforeSave: false });
-    try {
+
         const message = {
             body: {
                 name: user.username,
@@ -154,21 +167,24 @@ exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
             }
         };
         const emailBody = mailGenerator.generate(message);
-        await sendEmail({
+        sendEmail({
             email: user.email,
             subject: `Password Recovery`,
             message: emailBody
-        });
-        res.status(200).json({
-            success: true,
-            message: `Email sent to ${user.email} successfully`
-        });
-    } catch (error) {
-        user.resetPasswordToken = undefined;
-        user.resetPasswordExpire = undefined;
-        await user.save({ validateBeforeSave: false });
-        return next(new ErrorHandler(error.message, 500));
-    }
+        }).then( ()=>{
+            return res.status(200).json({
+                success: true,
+                message: `Email sent to ${user.email} successfully`
+            });
+        }).catch( error =>{
+            user.resetPasswordToken = undefined;
+            user.resetPasswordExpire = undefined;
+            return res.status(500).json({
+                success: true,
+                message: `Could Not send OTP: ${error}`
+            });
+        })
+
 })
 
 //Verify OTP
