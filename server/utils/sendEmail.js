@@ -2,11 +2,11 @@ const nodeMailer = require("nodemailer");
 
 const sendEmail = async (options)=>{
     const transporter = nodeMailer.createTransport({
-        host: 'smtp.ethereal.email',
+        host: 'smtp.gmail.com',
         port : 587,
         auth:{
-            user:process.env.SMPT_MAIL,//SMPT-simple mail transfer protocol
-            pass:process.env.SMPT_PASSWORD
+            user: 'merntestpjt@gmail.com',//SMPT-simple mail transfer protocol
+            pass: 'lbqzjwzgtjirzmur'
         }
     });
     const mailOptions = {
