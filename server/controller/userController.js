@@ -294,7 +294,7 @@ exports.usernameAuth = catchAsyncErrors(async (req,res,next) => {
         })
     }
 
-    return res.status(200).json({
+    res.status(200).json({
         success: true,
         message: "User found",
         user

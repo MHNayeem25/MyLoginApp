@@ -53,7 +53,8 @@ export async function getUserProfile(username) {
     try {
         const res = await axios.post('/api/auth/username', { username });
         //console.log(res);
-        return res;
+        //return res;
+        if (res.status === 200) return Promise.resolve(res.data.user.profile);
     } catch (error) {
         return { error: "Username doesn't exist..!", status: 401, data: "" };
     }

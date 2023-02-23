@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import {Link, useNavigate} from 'react-router-dom'
 import avatar from '../assets/profile.png'
-import {Toaster} from 'react-hot-toast'
+import toast, {Toaster} from 'react-hot-toast'
 import {useFormik} from 'formik'
 import styles from '../styles/Username.module.css'
 import { usernameValidate } from '../helper/validate'
@@ -42,7 +42,14 @@ const Username = () => {
       // console.log(values);
       //console.log(data);
       const userData = getUserProfile(values.username);
-      //  console.log(data);
+
+      toast.promise(userData, {
+        loading: 'Checking...',
+        success: <b>Login Successfull!</b>,
+        error: <b>Password Wrong</b>
+      })
+      //console.log(userData);
+      
       userData.then(res =>{
         //console.log(res.data.user.profile);
         setProfile(res.data.user.profile);
