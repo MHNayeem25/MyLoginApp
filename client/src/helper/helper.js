@@ -10,7 +10,7 @@ axios.defaults.baseURL = "https://loginapp-backend.onrender.com";
 export async function registerUser(credentials){
     try{
         //Register user first
-        const {data:{user},status} = await axios.post('/api/register', credentials);
+        const {status} = await axios.post('/api/register', credentials);
 
         let { username, email } = credentials;
 
