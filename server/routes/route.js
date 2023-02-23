@@ -22,8 +22,8 @@ router.route('/me').post( getUserDetails)   //Get details of user with given use
 router.route('/createResetSession').get()   //reset all the variables
 
 //Password reset using otp
-router.route('/password/forgot').post(forgotPassword)  //generate random OTP
-router.route('/password/verify').post(verifyOtp)    //verify generated OTP
+router.route('/password/forgot').put(forgotPassword)  //generate random OTP
+router.route('/password/verify').put(verifyOtp)    //verify generated OTP
 
 
 

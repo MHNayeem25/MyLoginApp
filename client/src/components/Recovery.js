@@ -19,19 +19,16 @@ const Recovery = () => {
   //to send otp
   useEffect( ()=>{
     console.log("Otp sent");
-    const pr = sendOtp(username);
-    //console.log(pr);
+      const pr = sendOtp(username);
+      //console.log(pr);
 
-    toast.promise(pr, {
-      loading: 'Sending... Please Wait!',
-      success: <b>OTP has been sent</b>,
-      error: <b>Could not send</b>
-    })
+      toast.promise(pr, {
+        loading: 'Sending... Please Wait!',
+        success: <b>OTP has been sent</b>,
+        error: <b>Could not send</b>
+      })
+      pr.then();
 
-    pr.then( otp => {
-      // if(otp) return toast.success("OTP has been sent to your email");
-      // return toast.error("There was a problem while sending OTP");
-    })
   },[username])
 
 
@@ -44,7 +41,7 @@ const Recovery = () => {
     validateOnBlur: false,
     validateOnChange: false,
     onSubmit: async values => {
-      console.log(values)
+      //console.log(values)
     }
   })
   
@@ -58,7 +55,7 @@ const Recovery = () => {
       error: <b>Wrong OTP</b>
     })
     pr.then( value =>{
-      console.log(value.data.resetSessionToken);
+      //console.log(value.data.resetSessionToken);
       const sessionToken = value.data.resetSessionToken;
       //save token in local storage
       localStorage.setItem('sessionToken', sessionToken);

@@ -26,7 +26,7 @@ const Register = () => {
       values = await Object.assign(values, { profile: file || "" });
       //console.log(values);
       let regProm = registerUser(values);
-      console.log(regProm);
+      //console.log(regProm);
       toast.promise(regProm, {
         loading :"Creating...",
         success : <b>Registered Successfully</b>,

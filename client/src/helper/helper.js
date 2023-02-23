@@ -152,7 +152,7 @@ export async function sendOtp(user){
         const data = {
             username : user
         }
-        return await axios.post('/api/password/forgot', data);
+        return await axios.put('/api/password/forgot', data);
     }catch(error){
         return error;
     }
@@ -161,7 +161,7 @@ export async function sendOtp(user){
 export async function verifyOtp(otpData){
     try{
         const data = {otp:otpData};
-        return axios.post('/api/password/verify', data);
+        return axios.put('/api/password/verify', data);
     }catch(error){
         return error;
     }
