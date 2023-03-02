@@ -8,7 +8,14 @@ export const AuthorizeUser = ({children})=>{
     }
     return children;
 };
-
+export const AuthorizeAdmin = ({ children }) => {
+    const role = useAuthStore.getState().auth.role;
+    const token = localStorage.getItem('token');
+    if (!token || role!=='admin') {
+        return <Navigate to={'/profile'} replace={true} ></Navigate>
+    }
+    return children;
+};
 export const ProtectRoute = ({children}) => {
     const username = useAuthStore.getState().auth.username;
     const token = localStorage.getItem('token');

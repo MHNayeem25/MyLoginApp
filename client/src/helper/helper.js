@@ -1,8 +1,8 @@
 import axios from 'axios'
 import jwt_decode from 'jwt-decode'
 
-//axios.defaults.baseURL = "http://localhost:4000";
-axios.defaults.baseURL = "https://loginapp-backend.onrender.com";
+axios.defaults.baseURL = "http://localhost:4000";
+//axios.defaults.baseURL = "https://loginapp-backend.onrender.com";
 
 /** Make API Requests */
 
@@ -54,7 +54,7 @@ export async function getUserProfile(username) {
         const res = await axios.post('/api/auth/username', { username });
         //console.log(res);
         //return res;
-        if (res.status === 200) return Promise.resolve(res.data.user.profile);
+        if (res.status === 200) return Promise.resolve(res);
     } catch (error) {
         return { error: "Username doesn't exist..!", status: 401, data: "" };
     }
@@ -184,3 +184,15 @@ export async function resetPassword(credentials){
    }
 }
 
+//Admin
+
+//get all data
+export async function getUsers(){
+    try{
+        const data = await axios.get('/api/admin');
+        //console.log(data);
+        return data;
+    }catch(error){
+        return Promise.reject({ error });;
+    }
+}

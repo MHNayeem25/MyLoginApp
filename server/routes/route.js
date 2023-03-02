@@ -2,7 +2,7 @@ const express = require('express');
 
 const router = express.Router();
 
-const { registerUser, loginUser, getUserDetails, updateUserDetails, forgotPassword, resetPassword, logout, usernameAuth, verifyOtp, emailUser} = require('../controller/userController');
+const { registerUser, loginUser, getUserDetails, updateUserDetails, forgotPassword, resetPassword, logout, usernameAuth, verifyOtp, emailUser, allUsers} = require('../controller/userController');
 const { isAuthenticatedUser, authCheck } = require('../middleware/auth');
 
 router.route('/register').post(registerUser);
@@ -21,6 +21,9 @@ router.route('/me/auth').get(authCheck)    //Just check for logged in status
 router.route('/me').post( getUserDetails)   //Get details of user with given username
 router.route('/createResetSession').get()   //reset all the variables
 
+/** Admin */
+router.route('/admin').get(allUsers)    //Get all users--admin
+
 //Password reset using otp
 router.route('/password/forgot').put(forgotPassword)  //generate random OTP
 router.route('/password/verify').put(verifyOtp)    //verify generated OTP
@@ -31,6 +34,7 @@ router.route('/password/verify').put(verifyOtp)    //verify generated OTP
 /** Put methods */
 router.route('/me/update').put(updateUserDetails);  //is use to update the user profile
 router.route('/me/password/reset').put(resetPassword); //use to change password
+
 
 router.route("/logout").get(logout);
 

@@ -48,13 +48,18 @@ const Password = () => {
       //
       //set all other fields for profile page in our store
       //After verification
-      setExtra(res);
+        setExtra(res);
       //
       //
-        let {token} = res;
-        // console.log(token);
+        let {token, role} = res;
+        
         localStorage.setItem('token',token);
-        navigate('/profile');
+        if(role==='user'){
+          navigate('/profile');
+        }else{
+          navigate('/admin');
+        }
+        
       })
       .catch(error =>{
         //toast.error("Password Wrong");

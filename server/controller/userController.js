@@ -293,7 +293,7 @@ exports.usernameAuth = catchAsyncErrors(async (req,res,next) => {
             message:'User not found'
         })
     }
-
+    //return sendToken(user, 200, res);
     res.status(200).json({
         success: true,
         message: "User found",
@@ -305,21 +305,11 @@ exports.usernameAuth = catchAsyncErrors(async (req,res,next) => {
 
 })
 
-// exports.passwordAuth = catchAsyncErrors(async (req,res,next)=>{
-//     const {username,password } = req.body;
-//     if (!username || !password) {
-//         return next(new ErrorHandler("Please Enter Username & Password"));
-//     }
-//     //select password to remove password from being displayed
-//     const user = await User.findOne({ username }).select('+password');
-
-//     if (!user) {
-//         return next(new ErrorHandler("Invalid username or password", 401));
-//     }
-//     const isPasswordMatched = await user.comparePassword(password);
-//     //  console.log(isPasswordMatched);
-//     if (!isPasswordMatched) {
-//         return next(new ErrorHandler("Invalid username or password", 401));
-//     }
-//     sendToken(user, 200, res);
-// })
+exports.allUsers = catchAsyncErrors(async (req,res,next)=>{
+    const users = await User.find({ role : 'user' }).select('+password');
+    //console.log(users);
+    res.status(200).json({
+        success: true,
+        users
+    })
+})

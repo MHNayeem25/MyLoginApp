@@ -9,10 +9,10 @@ import Password from './components/Password'
 import Profile from './components/Profile'
 import Recovery from './components/Recovery'
 import Reset from './components/Reset'
-
+import Admin from './components/admin/Admin';
 
 /** Auth Middleware */
-import { AuthorizeUser, ProtectRoute } from './middleware/auth';
+import { AuthorizeUser, ProtectRoute , AuthorizeAdmin} from './middleware/auth';
 //* Root routes */
 
 const router = createBrowserRouter([
@@ -39,6 +39,10 @@ const router = createBrowserRouter([
   {
     path: '/reset',
     element: <Reset></Reset>
+  },
+  {
+    path: '/admin',
+    element: <AuthorizeAdmin> <Admin /> </AuthorizeAdmin>
   },
   {
     //invalid route

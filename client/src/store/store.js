@@ -1,18 +1,6 @@
 import {create} from 'zustand';
 import { devtools } from 'zustand/middleware'
 
-// const initialValues = {
-//     username: '',
-//     profile: '',
-//     //extra
-//     firstName: '',
-//     lastName: '',
-//     email: "",
-//     mobile: '',
-//     address: '',
-//     id: '',
-//     active: false
-// }
 export const useAuthStore = create(devtools((set)=>({
     auth:{
         username : '',
@@ -24,6 +12,7 @@ export const useAuthStore = create(devtools((set)=>({
         mobile: '',
         address: '',
         id : '',
+        role: '',
         active : false
     },
     setUsername : (name) => set( (state) => ({auth : { ...state.auth, username : name}})),
@@ -35,6 +24,7 @@ export const useAuthStore = create(devtools((set)=>({
         address:d.address,
         mobile:d.mobile,
         id: d._id,
+        role: d.role,
     }})),
     reset: () => set((state) => ({
         auth: {
@@ -47,6 +37,7 @@ export const useAuthStore = create(devtools((set)=>({
             mobile: '',
             address: '',
             id: '',
+            role: '',
             active: false
         }
 }))

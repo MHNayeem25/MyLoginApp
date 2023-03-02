@@ -25,6 +25,7 @@ const Username = () => {
         setUsername(data.username);
         setProfile(data.profile);
         // console.log(username);
+        
       }
       fetchData();
     }
@@ -42,16 +43,17 @@ const Username = () => {
       // console.log(values);
       //console.log(data);
       const userData = getUserProfile(values.username);
+      
 
       toast.promise(userData, {
         loading: 'Checking...',
-        success: <b>Login Successfull!</b>,
-        error: <b>Password Wrong</b>
+        success: <b>User Found</b>,
+        error: <b>Wrong Username</b>
       })
       //console.log(userData);
       
       userData.then(res =>{
-        //console.log(res.data.user.profile);
+        //console.log(res);
         setProfile(res.data.user.profile);
       })
       setUsername(values.username);
