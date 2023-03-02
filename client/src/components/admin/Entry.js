@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link} from 'react-router-dom'
 
 const Entry = (props) => {
   return (
@@ -13,7 +14,7 @@ const Entry = (props) => {
               {props.user}
             </td>
             <td className="px-6 py-4 text-right">
-              <a href="#" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Details</a>
+              <Link to="" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Details</Link>
           </td>
         </tr>
   )
