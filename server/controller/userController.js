@@ -5,6 +5,14 @@ const sendToken = require("../utils/jwtToken");
 const sendEmail = require("../utils/sendEmail.js");
 const crypto = require('crypto')
 const Mailgen = require('mailgen')
+const cloudinary = require('cloudinary');
+
+cloudinary.config({
+    cloud_name: process.env.CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_kEY,
+    api_secret: process.env.CLOUDINARY_SECRET,
+    secure: true
+});
 
 // Configure mailgen by setting a theme and your product info
 const mailGenerator = new Mailgen({
@@ -20,7 +28,7 @@ const mailGenerator = new Mailgen({
 
 
 exports.registerUser = catchAsyncErrors(async (req, res, next) => {
-    const { username, email, password, profile } = req.body;
+    const { username, email, password, profile , profile_id} = req.body;
     //check if username exists
     const userPresent = await User.findOne({ username });
     if (userPresent) {
@@ -33,7 +41,7 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
 
     try{
         const user = await User.create({
-            username, email, password, profile
+            username, email, password, profile, profile_id
         });
         res.status(200).json({
             user: user,
@@ -124,10 +132,11 @@ exports.updateUserDetails = catchAsyncErrors(async (req,res,next)=>{
     const newUserData = {
         firstName : req.body.firstName,
         address : req.body.address,
-        profile : req.body.profile,
         lastName : req.body.lastName,
         mobile   : req.body.mobile,
         email   :  req.body.email,
+        profile: req.body.profile,
+        profile_id : req.body.profile_id
     }
     //console.log(req.body.id);
     const user = await User.findByIdAndUpdate(req.body.id, newUserData, {
@@ -312,4 +321,26 @@ exports.allUsers = catchAsyncErrors(async (req,res,next)=>{
         success: true,
         users
     })
-})
+});
+
+
+exports.delPic = catchAsyncErrors(async (req,res,next)=>{
+    //console.log(cloudinary.config());
+    //console.log(req.body.public_id);
+    cloudinary.config({
+        cloud_name: process.env.CLOUD_NAME,
+        api_key: process.env.CLOUDINARY_kEY,
+        api_secret: process.env.CLOUDINARY_SECRET,
+        secure: true
+    });
+        
+    cloudinary.uploader.destroy(req.body.public_id).then(result=> {
+        //console.log(result);
+        res.status(200).json({
+            success: true,
+            result
+        })
+    })
+});
+
+

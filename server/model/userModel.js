@@ -34,6 +34,7 @@ const userSchema = new mongoose.Schema({
     mobile : {type:Number},
     address: {type : String},
     profile: {type:String},
+    profile_id : {type:String},
     resetPasswordToken: String,
     resetPasswordExpire: Date,
 })

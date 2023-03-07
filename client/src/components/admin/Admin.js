@@ -53,7 +53,7 @@ if(data.length>0){
       <button type="button" onClick={userLogout} className="fixed right-px top-10	 text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-full text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">LogOut</button>
 
     
-    <div className="flex items-center justify-center overflow-x-auto shadow-md sm:rounded-lg mt-20 w-3/4 mx-auto">
+    <div className="flex items-center justify-center overflow-x-auto shadow-md sm:rounded-lg mt-20 w-3/4 mx-auto mb-12" >
       <Toaster position='top-center' reverseOrder={false}></Toaster>
       <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
         <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">

@@ -1,8 +1,8 @@
 import axios from 'axios'
 import jwt_decode from 'jwt-decode'
 
-//axios.defaults.baseURL = "http://localhost:4000";
-axios.defaults.baseURL = "https://loginapp-backend.onrender.com";
+axios.defaults.baseURL = "http://localhost:4000";
+//axios.defaults.baseURL = "https://loginapp-backend.onrender.com";
 
 /** Make API Requests */
 
@@ -194,5 +194,34 @@ export async function getUsers(){
         return data;
     }catch(error){
         return Promise.reject({ error });;
+    }
+}
+
+export async function setProfileCloud(file){
+    try{
+        // const fileReader = new FileReader();
+        // fileReader.readAsDataURL(file);
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', 'sm4htwrd');
+        formData.append('api_key', '563912427435285');
+        // const cred = {
+        //     file: file,
+        //     upload_preset: 'sm4htwrd',
+        //     api_key: '563912427435285'
+        // }
+        //console.log(formData);
+        const data = await axios.post('https://api.cloudinary.com/v1_1/dr1ikq3ji/upload', formData);
+        return data;
+    }catch(error){
+        return Promise.reject({ error });
+    }
+}
+
+export async function delProfileCloud(num){
+    try{
+        return await axios.put('api/me/del/profile',{public_id:num});
+    }catch(error){
+        return Promise.reject({ error });
     }
 }

@@ -10,6 +10,7 @@ import Profile from './components/Profile'
 import Recovery from './components/Recovery'
 import Reset from './components/Reset'
 import Admin from './components/admin/Admin';
+import PageNotFound from './components/PageNotFound';
 
 /** Auth Middleware */
 import { AuthorizeUser, ProtectRoute , AuthorizeAdmin} from './middleware/auth';
@@ -47,7 +48,7 @@ const router = createBrowserRouter([
   {
     //invalid route
     path: '*',
-    element: <Reset></Reset>
+    element: <PageNotFound></PageNotFound>
   },
 ])
 

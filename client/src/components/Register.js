@@ -5,13 +5,26 @@ import toast, { Toaster } from 'react-hot-toast'
 import { useFormik } from 'formik'
 import styles from '../styles/Username.module.css'
 import { registerValidation } from "../helper/validate";
-import convertToBase64 from '../helper/convert'
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 import { useState } from 'react'
-import { registerUser } from '../helper/helper' 
+import { registerUser, setProfileCloud } from '../helper/helper'
+import { useLottie } from 'lottie-react'
+import * as greenTick from '../assets/green-tick.json'
 
 const Register = () => {
   const navigate = useNavigate();
   const [file, setFile] = useState();
+  const [url, setUrl] = useState("");
+  const [open, setOpen] = useState(false);
+  const [animation, setAnimation] = useState(false);
+
+  const submitData = async (values, urlCloud) => {
+    values = await Object.assign(values, { profile: urlCloud ? urlCloud.data.secure_url : "" },
+      { profile_id: urlCloud ? urlCloud.data.public_id : "" });
+    await registerUser(values);
+
+  }
 
   const formik = useFormik({
     initialValues: {
@@ -23,30 +36,92 @@ const Register = () => {
     validateOnBlur: false,
     validateOnChange: false,
     onSubmit: async (values) => {
-      values = await Object.assign(values, { profile: file || "" });
-      //console.log(values);
-      let regProm = registerUser(values);
-      //console.log(regProm);
-      toast.promise(regProm, {
-        loading :"Creating...",
-        success : <b>Registered Successfully</b>,
-        error   : <b>Could not Register.</b>
-      })
-      regProm.then(function( ) {
-        navigate('/');
-      })
+
+      setOpen(true);
+
+      if (file) {
+        try {
+          const urlCloud = await setProfileCloud(file);
+          await submitData(values, urlCloud);
+          setOpen(false);
+          setAnimation(true);
+          setTimeout(() => {
+            //setAnimation(false);
+            navigate('/');
+          }, 1200)
+        } catch (error) {
+          console.log(error);
+          toast.error(<b>Could not Register.</b>);
+        }
+
+      } else {
+        try {
+          await submitData(values, null);
+          setOpen(false);
+          setAnimation(true);
+          setTimeout(() => {
+            //setAnimation(false);
+            navigate('/');
+          }, 1200)
+        } catch (error) {
+          console.log(error);
+          toast.error(<b>Could not Register.</b>)
+          setOpen(false);
+        }
+
+      }
+
     },
   });
+
+
+  const style = {
+    height: 300,
+  };
+  const options = {
+    animationData: greenTick,
+    loop: true,
+    height: 100,
+    width: 100,
+    autoplay: true,
+  };
+  const { View } = useLottie(options, style);
+
 
   /** formik doesnot support file upload so we need to create this handler */
   const onUpload = async e => {
     //console.log(e);
-    const base64 = await convertToBase64(e.target.files[0]);
-    setFile(base64);
+    //const base64 = await convertToBase64(e.target.files[0]);
+    setFile(e.target.files[0]);
+    // if (url) {
+    //   URL.revokeObjectURL(url) // free memory
+    // }
+    setUrl(URL.createObjectURL(e.target.files[0]));
   }
 
   return (
     <div className="container mx-auto">
+
+      <div>
+        <Backdrop
+          sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={open}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      </div>
+
+      <div>
+        <Backdrop
+          sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={animation}
+        >
+           <>{View}</>
+        </Backdrop>
+      </div>
+
+      
+
       <Toaster position="top-center" reverseOrder={false}></Toaster>
       <div className="flex justify-center items-center h-screen">
         <div className={styles.glass} style={{ width: "45%" }}>
@@ -62,7 +137,7 @@ const Register = () => {
               <label htmlFor="profile">
                 <img
                   className={styles.profile_img}
-                  src={file || avatar}
+                  src={url || avatar}
                   alt="avatar"
                 />
               </label>

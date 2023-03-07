@@ -2,7 +2,7 @@ const express = require('express');
 
 const router = express.Router();
 
-const { registerUser, loginUser, getUserDetails, updateUserDetails, forgotPassword, resetPassword, logout, usernameAuth, verifyOtp, emailUser, allUsers} = require('../controller/userController');
+const { registerUser, loginUser, getUserDetails, updateUserDetails, forgotPassword, resetPassword, logout, usernameAuth, verifyOtp, emailUser, allUsers, delPic} = require('../controller/userController');
 const { isAuthenticatedUser, authCheck } = require('../middleware/auth');
 
 router.route('/register').post(registerUser);
@@ -33,6 +33,9 @@ router.route('/password/verify').put(verifyOtp)    //verify generated OTP
 
 /** Put methods */
 router.route('/me/update').put(updateUserDetails);  //is use to update the user profile
+
+router.route('/me/del/profile').put(delPic);    //delete profile pic
+
 router.route('/me/password/reset').put(resetPassword); //use to change password
 
 

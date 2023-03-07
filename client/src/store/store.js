@@ -5,6 +5,7 @@ export const useAuthStore = create(devtools((set)=>({
     auth:{
         username : '',
         profile : '',
+        profile_id: '',
         //extra
         firstName: '',
         lastName: '',
@@ -25,11 +26,13 @@ export const useAuthStore = create(devtools((set)=>({
         mobile:d.mobile,
         id: d._id,
         role: d.role,
+        profile_id: d.profile_id
     }})),
     reset: () => set((state) => ({
         auth: {
             username: '',
             profile: '',
+            profile_id: '',
             //extra
             firstName: '',
             lastName: '',
