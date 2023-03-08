@@ -47,15 +47,23 @@ const Profile = () => {
       { profile: urlCloud ? urlCloud.data.secure_url : profile },
       { profile_id: urlCloud ? urlCloud.data.public_id : profile_id },
       { username: username }, { id: id });
-    const updatePromise = updateUser(values);
+    try{
+      await updateUser(values);
+      toast.success(<b>Update Successfull!</b>);
+    } catch(error){
+      console.log(error);
+    }
+    
     //console.log(values);
-    toast.promise(updatePromise, {
-      loading: 'Please Wait...',
-      success: <b>Update Successfull!</b>,
-      error: <b>Something Went Wrong!</b>
-    })
+    // toast.promise(updatePromise, {
+    //   loading: 'Please Wait...',
+    //   success: <b>Update Successfull!</b>,
+    //   error: <b>Something Went Wrong!</b>
+    // })
+    
+    // updatePromise.then(()=>{}
 
-    updatePromise.then().catch();
+    // ).catch();
   }
 
   //const navigate = useNavigate();
@@ -83,14 +91,14 @@ const Profile = () => {
           URL.revokeObjectURL(url) // free memory
           setUrl(urlCloud.data.secure_url);
           //save data
-          submitData(values,urlCloud);
+          await submitData(values,urlCloud);
           setFile('');
 
           setOpen(false);
 
         }else{
           setOpen(true);
-          submitData(values, null);
+          await submitData(values, null);
           setOpen(false);
 
         }
