@@ -11,7 +11,10 @@ export const AuthorizeUser = ({children})=>{
 export const AuthorizeAdmin = ({ children }) => {
     const role = useAuthStore.getState().auth.role;
     const token = localStorage.getItem('token');
-    if (!token || role!=='admin') {
+    if(!token){
+        return <Navigate to={'/'} replace={true} ></Navigate>
+    }
+    if (token && role!=='admin') {
         return <Navigate to={'/profile'} replace={true} ></Navigate>
     }
     return children;
