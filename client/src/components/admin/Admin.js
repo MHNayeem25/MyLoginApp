@@ -5,8 +5,14 @@ import toast,{ Toaster } from 'react-hot-toast';
 import {logoutUser} from '../../helper/helper'
 import { useAuthStore } from '../../store/store'
 import {useNavigate } from 'react-router-dom'
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
 
 const Admin = () => {
+
+  
+
+
   const navigate = useNavigate();
   const reset = useAuthStore(state => state.reset);
     const [data,setData] = useState([]);
@@ -49,7 +55,24 @@ if(data.length>0){
 
   return (
 
+    
+
     <div className="">
+
+
+
+      <Box  
+        component="form"
+        sx={{
+          '& > :not(style)': { m: 1, width: '25ch' },
+        }}
+        noValidate
+        autoComplete="off"
+      >
+        <TextField id="outlined-basic" label="Search" variant="outlined" />
+      </Box>
+
+
       <button type="button" onClick={userLogout} className="fixed right-px top-10	 text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-full text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">LogOut</button>
 
     
