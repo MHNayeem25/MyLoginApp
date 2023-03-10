@@ -6,6 +6,9 @@ const sendEmail = require("../utils/sendEmail.js");
 const crypto = require('crypto')
 const Mailgen = require('mailgen')
 const cloudinary = require('cloudinary');
+const csv = require('fast-csv');
+const fs = require('fs');
+
 
 cloudinary.config({
     cloud_name: process.env.CLOUD_NAME,
@@ -28,7 +31,7 @@ const mailGenerator = new Mailgen({
 
 
 exports.registerUser = catchAsyncErrors(async (req, res, next) => {
-    const { username, email, password, profile , profile_id} = req.body;
+    const { username, email, password, profile, profile_id } = req.body;
     //check if username exists
     const userPresent = await User.findOne({ username });
     if (userPresent) {
@@ -39,7 +42,7 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
         return next(new ErrorHandler("User already registered.", 404));
     }
 
-    try{
+    try {
         const user = await User.create({
             username, email, password, profile, profile_id
         });
@@ -47,13 +50,13 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
             user: user,
             message: "Registered Successfully",
         });
-    }catch(error){
+    } catch (error) {
         return next(new ErrorHandler(error.message, 500));
     }
-       
+
 });
 
-exports.emailUser = catchAsyncErrors(async (req,res,next)=>{
+exports.emailUser = catchAsyncErrors(async (req, res, next) => {
     const message = {
         body: {
             name: req.body.username,
@@ -80,8 +83,8 @@ exports.emailUser = catchAsyncErrors(async (req,res,next)=>{
 })
 
 //Login User
-exports.loginUser = catchAsyncErrors(async (req,res,next)=>{
-    const {username,password} = req.body;
+exports.loginUser = catchAsyncErrors(async (req, res, next) => {
+    const { username, password } = req.body;
     if (!username || !password) {
         return next(new ErrorHandler("Please Enter Email & Password"));
     }
@@ -119,31 +122,31 @@ exports.getUserDetails = catchAsyncErrors(async (req, res, next) => {
 
 
 //update user details
-exports.updateUserDetails = catchAsyncErrors(async (req,res,next)=>{
+exports.updateUserDetails = catchAsyncErrors(async (req, res, next) => {
     const curUsername = req.body.username;
-    
+
     //check if username exists
     //const userPresent = await User.findOne({ username : curUsername });
-    
+
     // if(!userPresent){
     //     return next(new ErrorHandler("Please use an unique username.", 404));
     // }
     //console.log(req.body);
     const newUserData = {
-        firstName : req.body.firstName,
-        address : req.body.address,
-        lastName : req.body.lastName,
-        mobile   : req.body.mobile,
-        email   :  req.body.email,
+        firstName: req.body.firstName,
+        address: req.body.address,
+        lastName: req.body.lastName,
+        mobile: req.body.mobile,
+        email: req.body.email,
         profile: req.body.profile,
-        profile_id : req.body.profile_id
+        profile_id: req.body.profile_id
     }
     //console.log(req.body.id);
     const user = await User.findByIdAndUpdate(req.body.id, newUserData, {
         new: true,
         runValidators: true,
         useFindAndModify: false
-    }).catch(error =>{
+    }).catch(error => {
         console.log(error);
     })
     //await user.save();
@@ -168,42 +171,42 @@ exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
     //console.log(resetToken);
     await user.save({ validateBeforeSave: false });
 
-        const message = {
-            body: {
-                name: user.username,
-                intro: `Your OTP is ${resetToken}. Verify and recover your password.`,
-                outro: 'Need help, or have questions? Just reply to this email, we\'d love to help.'
-            }
-        };
-        const emailBody = mailGenerator.generate(message);
-        sendEmail({
-            email: user.email,
-            subject: `Password Recovery`,
-            message: emailBody
-        }).then( ()=>{
-            return res.status(200).json({
-                success: true,
-                message: `Email sent to ${user.email} successfully`
-            });
-        }).catch( error =>{
-            user.resetPasswordToken = undefined;
-            user.resetPasswordExpire = undefined;
-            return res.status(500).json({
-                success: true,
-                message: `Could Not send OTP: ${error}`
-            });
-        })
+    const message = {
+        body: {
+            name: user.username,
+            intro: `Your OTP is ${resetToken}. Verify and recover your password.`,
+            outro: 'Need help, or have questions? Just reply to this email, we\'d love to help.'
+        }
+    };
+    const emailBody = mailGenerator.generate(message);
+    sendEmail({
+        email: user.email,
+        subject: `Password Recovery`,
+        message: emailBody
+    }).then(() => {
+        return res.status(200).json({
+            success: true,
+            message: `Email sent to ${user.email} successfully`
+        });
+    }).catch(error => {
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpire = undefined;
+        return res.status(500).json({
+            success: true,
+            message: `Could Not send OTP: ${error}`
+        });
+    })
 
 })
 
 //Verify OTP
-exports.verifyOtp = catchAsyncErrors(async (req,res,next) =>{
+exports.verifyOtp = catchAsyncErrors(async (req, res, next) => {
     //console.log(`user Input : ${req.body.otp}`);
     //const resetPasswordToken = req.body.otp;
     //console.log(`Recieved token : ${resetPasswordToken}`);
     //console.log(`verification time: ${Date.now()}`);
     const user = await User.findOne({
-        resetPasswordToken : req.body.otp,
+        resetPasswordToken: req.body.otp,
     }).exec();
     //console.log(`User token in db : ${user}`);
 
@@ -215,10 +218,10 @@ exports.verifyOtp = catchAsyncErrors(async (req,res,next) =>{
         .update(resetToken)
         .digest("hex");
 
-    if(!user){
+    if (!user) {
         return next(new ErrorHandler("Reset Password Token is invalid or has expired.", 404));
     }
-    if(user.resetPasswordExpire < Date.now()){
+    if (user.resetPasswordExpire < Date.now()) {
         return next(new ErrorHandler("Reset Password Token is invalid or has expired.", 404));
     }
     //console.log('success');
@@ -231,13 +234,13 @@ exports.verifyOtp = catchAsyncErrors(async (req,res,next) =>{
 
 //Reset Password
 exports.resetPassword = catchAsyncErrors(async (req, res, next) => {
-    
+
     //console.log(req.body);
     const username = req.body.username;
     const user = await User.findOne({
         username
     });
-    if(!user){
+    if (!user) {
         return next(new ErrorHandler("Unauthorised user."));
     }
     user.password = req.body.password;
@@ -287,8 +290,8 @@ exports.logout = catchAsyncErrors(async (req, res, next) => {
 })
 
 
-exports.usernameAuth = catchAsyncErrors(async (req,res,next) => {
-    const {username} = req.body;
+exports.usernameAuth = catchAsyncErrors(async (req, res, next) => {
+    const { username } = req.body;
     if (!username) {
         return next(new ErrorHandler("Please Enter Username"));
     }
@@ -298,8 +301,8 @@ exports.usernameAuth = catchAsyncErrors(async (req,res,next) => {
     if (!user) {
         //return next(new ErrorHandler("Invalid username", 401));
         return res.status(401).json({
-            success:false,
-            message:'User not found'
+            success: false,
+            message: 'User not found'
         })
     }
     //return sendToken(user, 200, res);
@@ -309,22 +312,47 @@ exports.usernameAuth = catchAsyncErrors(async (req,res,next) => {
         user
     });
     //next();
-    
+
     //sendToken(user, 200, res);
 
 })
 
-exports.allUsers = catchAsyncErrors(async (req,res,next)=>{
-    const users = await User.find({ role : 'user' }).select('+password');
-    //console.log(users);
-    res.status(200).json({
-        success: true,
-        users
-    })
+exports.allUsers = catchAsyncErrors(async (req, res, next) => {
+    const search = req.query.search || "";
+    const page = req.query.page || 1;
+    const ITEMS_PER_PAGE = 6;
+    const query = {
+        email: { $regex: search, $options: "i" },
+        role: "user"
+    }
+    try {
+        const skip = (page - 1) * ITEMS_PER_PAGE;
+        const count = await User.countDocuments(query);
+        //console.log(count);
+        const users = await User.find(query)
+                        .select('-password')
+                        .limit(ITEMS_PER_PAGE)
+                        .skip(skip);
+        
+        const pageCount = Math.ceil(count/ITEMS_PER_PAGE);
+
+                        
+        //console.log(users);
+        res.status(200).json({
+            success: true,
+            Pagination:{
+                count, pageCount
+            },
+            users
+        })
+    } catch (error) {
+        res.status(401).json(error);
+    }
+
 });
 
 
-exports.delPic = catchAsyncErrors(async (req,res,next)=>{
+exports.delPic = catchAsyncErrors(async (req, res, next) => {
     //console.log(cloudinary.config());
     //console.log(req.body.public_id);
     cloudinary.config({
@@ -333,8 +361,8 @@ exports.delPic = catchAsyncErrors(async (req,res,next)=>{
         api_secret: process.env.CLOUDINARY_SECRET,
         secure: true
     });
-        
-    cloudinary.uploader.destroy(req.body.public_id).then(result=> {
+
+    cloudinary.uploader.destroy(req.body.public_id).then(result => {
         //console.log(result);
         res.status(200).json({
             success: true,
@@ -343,4 +371,56 @@ exports.delPic = catchAsyncErrors(async (req,res,next)=>{
     })
 });
 
+//Export to csv
+exports.userExport = catchAsyncErrors(async (req, res, next) => {
+    try {
+        const search = req.query.search || "";
+        const query = {
+            email: { $regex: search, $options: "i" },
+            role: "user"
+        }
+        const usersData = await User.find(query).select('-password');
+        //console.log(usersData);
+        const csvStream = csv.format({ headers: true });
+        if (!fs.existsSync("public/files/export/")) {
+            if (!fs.existsSync("public/files")) {
+                fs.mkdirSync("public/files/");
+            }
+            if (!fs.existsSync("public/files/export")) {
+                fs.mkdirSync("public/files/export/");
+            }
+        }
 
+        const writablestream = fs.createWriteStream(
+            "public/files/export/users.csv"
+        );
+
+        csvStream.pipe(writablestream);
+
+        writablestream.on("finish", () => {
+            res.json({
+                downloadUrl: `https://loginapp-backend.onrender.com/files/export/users.csv`
+            })
+        });
+
+        if (usersData.length > 0) {
+            usersData.map((user) => {
+                csvStream.write({
+                    FirstName: user.firstName ? user.firstName : "-",
+                    LastName: user.lastName ? user.lastName : "-",
+                    Usernam: user.username,
+                    Email: user.email ? user.email : "-",
+                    Address: user.address ? user.address : "-",
+                    Phone: user.mobile ? user.mobile : "-",
+                })
+            })
+        }
+
+        csvStream.end();
+        writablestream.end();
+
+    } catch (error) {
+        console.log(error);
+        res.status(401).json(error);
+    }
+})

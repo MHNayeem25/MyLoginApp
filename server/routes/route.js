@@ -2,7 +2,7 @@ const express = require('express');
 
 const router = express.Router();
 
-const { registerUser, loginUser, getUserDetails, updateUserDetails, forgotPassword, resetPassword, logout, usernameAuth, verifyOtp, emailUser, allUsers, delPic} = require('../controller/userController');
+const { registerUser, loginUser, getUserDetails, updateUserDetails, forgotPassword, resetPassword, logout, usernameAuth, verifyOtp, emailUser, allUsers, delPic, userExport} = require('../controller/userController');
 const { isAuthenticatedUser, authCheck } = require('../middleware/auth');
 
 router.route('/register').post(registerUser);
@@ -23,6 +23,8 @@ router.route('/createResetSession').get()   //reset all the variables
 
 /** Admin */
 router.route('/admin').get(allUsers)    //Get all users--admin
+router.route('/export').get(userExport)   //Export to csv file
+
 
 //Password reset using otp
 router.route('/password/forgot').put(forgotPassword)  //generate random OTP

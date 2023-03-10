@@ -1,8 +1,8 @@
 import axios from 'axios'
 import jwt_decode from 'jwt-decode'
 
-axios.defaults.baseURL = "http://localhost:4000";
-//axios.defaults.baseURL = "https://loginapp-backend.onrender.com";
+//axios.defaults.baseURL = "http://localhost:4000";
+axios.defaults.baseURL = "https://loginapp-backend.onrender.com";
 
 /** Make API Requests */
 
@@ -187,9 +187,9 @@ export async function resetPassword(credentials){
 //Admin
 
 //get all data
-export async function getUsers(){
+export async function getUsers(search,page){
     try{
-        const data = await axios.get('/api/admin');
+        const data = await axios.get(`/api/admin?search=${search}&page=${page}`);
         //console.log(data);
         return data;
     }catch(error){
@@ -224,4 +224,8 @@ export async function delProfileCloud(num){
     }catch(error){
         return Promise.reject({ error });
     }
+}
+
+export async function exportToCsv(search){
+    return await axios.get(`api/export?search=${search}`);
 }
