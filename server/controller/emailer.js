@@ -20,8 +20,8 @@ let transporter = nodemailer.createTransport(nodeConfig);
 let MailGenerator = new Mailgen({
     theme: "default",
     product: {
-        name: "Mailgen",
-        link: 'https://mailgen.js/'
+        name: "LoginApp",
+        link: 'https://fascinating-mooncake-88f043.netlify.app'
     }
 })
 
