@@ -56,12 +56,14 @@ const Reset = () => {
                 className={styles.textbox}
                 type="text"
                 placeholder="New Password"
+                autoComplete="off"
               />
               <input
                 {...formik.getFieldProps("confirm_pwd")}
                 className={styles.textbox}
                 type="text"
                 placeholder="Confirm Password"
+                autoComplete="off"
               />
 
               <button className={styles.btn} type="submit">
