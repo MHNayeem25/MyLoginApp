@@ -85,6 +85,7 @@ exports.emailUser = catchAsyncErrors(async (req, res, next) => {
 //Login User
 exports.loginUser = catchAsyncErrors(async (req, res, next) => {
     const { username, password } = req.body;
+    //console.log(req.cookies);
     if (!username || !password) {
         return next(new ErrorHandler("Please Enter Email & Password"));
     }

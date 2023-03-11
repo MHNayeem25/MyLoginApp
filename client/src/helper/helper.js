@@ -74,7 +74,7 @@ export async function passwordLogin(values) {
         //     console.log(error);
         // })
         //await waits for axios-promise to resolve then only assigns
-    const res = await axios.post('/api/login', values);
+    const res = await axios.post('/api/login', values, { withCredentials: true });
 
     //console.log(res.cookie);
 

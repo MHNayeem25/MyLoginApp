@@ -11,8 +11,11 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_SECRET,
     secure: true
 });
-
-app.use(cors());
+const corsConfig = {
+    credentials: true,
+    origin: true,
+};
+app.use(cors(corsConfig));
 app.use(express.json());
 app.use(cookieParser());
 //app.use(morgan('tiny'));
