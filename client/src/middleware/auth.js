@@ -9,8 +9,9 @@ export const AuthorizeUser = ({children})=>{
     return children;
 };
 export const AuthorizeAdmin = ({ children }) => {
-    const role = useAuthStore.getState().auth.role;
+    //const role = useAuthStore.getState().auth.role;
     const token = localStorage.getItem('token');
+    const role = localStorage.getItem('role');
     if(!token){
         return <Navigate to={'/'} replace={true} ></Navigate>
     }

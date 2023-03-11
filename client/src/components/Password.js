@@ -52,7 +52,7 @@ const Password = () => {
       //
       //
         let {token, role} = res;
-        
+        localStorage.setItem('role',role);
         localStorage.setItem('token',token);
         if(role==='user'){
           navigate('/profile');

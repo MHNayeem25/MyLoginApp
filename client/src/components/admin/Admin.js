@@ -8,12 +8,12 @@ import { useNavigate } from 'react-router-dom'
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Page from './Page';
-
+import Spinner from './Spinner';
 
 const Admin = () => {
 
   const [search, setSearch] = useState("");
-
+  const [spin, setSpin] = useState(true);
 
   const navigate = useNavigate();
   const reset = useAuthStore(state => state.reset);
@@ -79,6 +79,7 @@ const Admin = () => {
   //Logout admin
   function userLogout() {
     localStorage.removeItem('token');
+    localStorage.removeItem('role');
     const logPromise = logoutUser();
     toast.promise(logPromise, {
       loading: 'Please Wait...',
@@ -165,10 +166,16 @@ const Admin = () => {
             </thead>
             <tbody>
 
-              {data.map((e, id) => {
-                return <Entry key={e._id} id={id+1+(page-1)*6} mail={e.email} user={e.username} />
-              })}
+            {
+              spin ? <Spinner/> : 
+            
 
+
+              data.map((e, id) => {
+                return <Entry key={e._id} id={id+1+(page-1)*6} mail={e.email} user={e.username} />
+              })
+
+            }
             </tbody>
           </table>
         </div>

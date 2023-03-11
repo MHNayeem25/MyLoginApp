@@ -152,6 +152,7 @@ const Profile = () => {
 
   function userLogout() {
     localStorage.removeItem('token');
+    localStorage.removeItem('role');
     const logPromise = logoutUser();
     toast.promise(logPromise, {
       loading: 'Please Wait...',
